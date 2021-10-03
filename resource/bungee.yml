@@ -1,0 +1,6 @@
+name: BungeeCordPlugin
+version: 1.0
+authors:
+  - MrCubee
+  - SkyfightTv
+main: net.skriptland.bungeecord.SkriptLand

@@ -1,9 +1,12 @@
 package net.skriptland.bungeecord.commands;
 
 import fr.mrcubee.langlib.Lang;
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
+import net.skriptland.bungeecord.group.Group;
+import net.skriptland.bungeecord.group.Groups;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -23,7 +26,18 @@ public class GroupCommand extends Command {
      * @param args Command arguments (without "/group create" arguments)
      */
     private void create(ProxiedPlayer commandSender, String[] args) {
-        /* TODO Complete this method for create player's team. */
+        Group group;
+
+        if (args == null) {
+            commandSender.sendMessage(ChatColor.RED + "Usage: /group create <name>");
+            return;
+        }
+        group = Groups.createGroup(commandSender, args[0]);
+        if (group == null) {
+            commandSender.sendMessage(Lang.getMessage(commandSender, "command.group.create.error.name", "&cThe name is already taken.", true));
+            return;
+        }
+        commandSender.sendMessage(Lang.getMessage(commandSender, "command.group.create.success", "&aThe %s group has been created.", true, group.getName()));
     }
 
     /** Remove current team subcommand.
@@ -31,7 +45,17 @@ public class GroupCommand extends Command {
      * @param args Command arguments (without "/group remove" arguments)
      */
     private void remove(ProxiedPlayer commandSender, String[] args) {
-        /* TODO Complete this method for remove current player's team. */
+        Group group = Groups.getPlayerGroup(commandSender);
+
+        if (group == null) {
+            commandSender.sendMessage(Lang.getMessage(commandSender, "command.group.remove.error.must_in_group", "&cYou must be in a group.", true));
+            return;
+        }
+        if (!Groups.removeGroup(group)) {
+            commandSender.sendMessage(Lang.getMessage(commandSender, "command.group.remove.error.must_be_owner", "&cYou must be the owner of your group.", true));
+            return;
+        }
+        commandSender.sendMessage(Lang.getMessage(commandSender, "command.group.remove.success", "&aThe %s group has been deleted.", true, group.getName()));
     }
 
     /** Invite another player in current team subcommand.
@@ -55,7 +79,11 @@ public class GroupCommand extends Command {
      * @param args Command arguments (without "/group leave" arguments)
      */
     private void leave(ProxiedPlayer commandSender, String[] args) {
-        /* TODO Complete this method for leave/remove current player's team. */
+        if (!Groups.removePlayerGroup(commandSender)) {
+            commandSender.sendMessage(Lang.getMessage(commandSender, "command.group.leave.error.must_in_group", "&cYou must be in a group.", true));
+            return;
+        }
+        commandSender.sendMessage(Lang.getMessage(commandSender, "command.group.leave.success", "&aYou left the group.", true));
     }
 
     @Override

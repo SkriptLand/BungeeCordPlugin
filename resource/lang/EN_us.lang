@@ -1,0 +1,15 @@
+# Commands
+command.error.must_be_player=&cYou must be a Player for execute this command.
+
+# Create Command
+command.group.create.error.name=&cThe name is already taken.
+command.group.create.success=&aThe %s group has been created.
+
+# Remove Command
+command.group.remove.error.must_in_group=&cYou must be in a group.
+command.group.remove.error.must_be_owner=&cYou must be the owner of your group.
+command.group.remove.success=&aThe %s group has been deleted.
+
+# Leave Command
+command.group.leave.error.must_in_group=&cYou must be in a group.
+command.group.leave.success=&aYou left the group.
